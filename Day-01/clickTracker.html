@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Click Tracker</title>
+	<script>
+		(function(){var a = 0, ge='getElementById', ih= 'innerHTML', d=document, w=window, ael='addEventListener', dcl= 'DOMContentLoaded';function b(){++a;d[ge]("divMessage")[ih] = a;}function i(){var bt = d[ge]("btnTrack");bt[ael]("click", b);}w[ael](dcl, i);})();
+	</script>
+</head>
+<body>
+	<input type="button" value="Track" id="btnTrack">
+	<div id="divMessage"></div>
+</body>
+</html>
