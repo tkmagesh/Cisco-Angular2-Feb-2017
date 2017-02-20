@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Salary Calculator</title>
+	<style>
+		.field{
+			margin-bottom: 10px;
+		}
+		#divResult{
+			color : red;
+			font-size: 22pt;
+			font-weight: bold;
+		}
+		label{
+			display: block;
+		}
+	</style>
+	<script src="jquery-3.1.1.js"></script>
+	<script>
+		String.prototype.toInt = function(){
+			return parseInt(this,10);
+		};
+		//Model
+		function SalaryCalculator(){
+			var _data = {
+				basic : 0,
+				hra : 0,
+				da : 0,
+				tax : 0,
+				salary : 0
+			};
+			this.get = function(attrName){
+				return _data[attrName];
+			};
+			this.set = function(attrName, value){
+				if (_data[attrName] === value) return;
+				_data[attrName] = value;
+				//trigger change notification for 'attrName'
+				var listenerFns = _eventHandlers[attrName];
+				for(var i=0; i < listenerFns.length; i++){
+					var listenerFn = listenerFns[i];
+					if (typeof listenerFn === 'function')
+						listenerFn();
+				}
+			};
+
+			var _eventHandlers = {
+				basic : [],
+				hra : [],
+				da : [],
+				tax : [],
+				salary : []
+			};
+
+			this.onChange = function(attrName, listenerFn){
+				_eventHandlers[attrName].push(listenerFn);
+			}
+		}
+		SalaryCalculator.prototype.calculate = function(){
+			var gross = this.get('basic') + this.get('hra') + this.get('da');
+			var net = gross * ((100-this.get('tax'))/100);
+			this.set('salary', net);
+			//setter triggers change notification
+		}
+
+		//View
+		function SalaryCalculatorComponent(calculator){
+			//Presentation
+			var template = `
+				<div class="content">
+					<div class="field"><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
+					<div class="field"><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
+					<div class="field"><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
+					<div class="field">
+						<label for="">Tax :</label>
+						<input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+						<span id="spanTax">[Tax]</span>
+					</div>
+					<div class="field"><input type="button" value="Calculate" id="btnCalculate"></div>
+					<div class="field" id="divResult">[Salary]</div>
+				</div>
+			`;
+			var $root = this.$root = $(template);
+
+
+			//Interaction Behavior
+
+			//React to user actions
+			$("#txtBasic", $root).change(function(){
+				calculator.set('basic', $("#txtBasic", $root).val().toInt());
+			});
+			$("#txtHra", $root).change(function(){
+				calculator.set('hra', $("#txtHra", $root).val().toInt());
+			});
+			$("#txtDa", $root).change(function(){
+				calculator.set('da', $("#txtDa", $root).val().toInt());
+			});
+			$("#rangeTax", $root).change(function(){
+				calculator.set('tax', $("#rangeTax", $root).val().toInt());
+			});
+
+			$("#btnCalculate", $root).click(function(){
+				calculator.calculate();
+			});
+
+			
+			//React to model changes
+			calculator.onChange('salary', function(){
+				$("#divResult", $root).html(calculator.get('salary'));
+			});
+			calculator.onChange('basic', function(){
+				$("#txtBasic", $root).val(calculator.get('basic'));
+			});
+			calculator.onChange('hra', function(){
+				$("#txtHra", $root).val(calculator.get('hra'));
+			});
+			calculator.onChange('da', function(){
+				$("#txtDa", $root).val(calculator.get('da'));
+			});
+			calculator.onChange('tax', function(){
+				$("#rangeTax", $root).val(calculator.get('tax'));
+				$("#spanTax", $root).html(calculator.get('tax'));
+			});
+
+		}
+		$(function(){
+			window.calculator = new SalaryCalculator();
+			window.v1 = new SalaryCalculatorComponent(calculator);
+			v1.$root.appendTo(document.body);
+			window.v2 = new SalaryCalculatorComponent(calculator);
+			v2.$root.appendTo(document.body);
+
+			
+		});
+	</script>
+</head>
+<body>
+	<h1>Salary Calculator</h1>
+	<hr>
+	
+</body>
+</html>
