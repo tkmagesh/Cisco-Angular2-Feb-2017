@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { HelloWorldComponent } from './hello-world/helloWorld.component';
 import { ClockComponent } from './clock/clock.component';
+import { SalaryCalculatorComponent } from './salary-calculator/salaryCalculator.component';
 
 /*import * as AppStuff from './app.component';
 var AppComponent = AppStuff.AppComponent;
@@ -18,7 +19,8 @@ var myFn = AppStuff.myFn;*/
   declarations: [
     AppComponent,
     HelloWorldComponent,
-    ClockComponent
+    ClockComponent,
+    SalaryCalculatorComponent
   ],
   imports: [
     BrowserModule,
