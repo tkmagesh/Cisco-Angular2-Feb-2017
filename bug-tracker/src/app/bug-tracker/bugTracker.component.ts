@@ -6,7 +6,7 @@ import { IBug } from './models/IBug';
 	styleUrls : ['bugTracker.style.css'],
 	template : `
 		<section class="stats">
-		 	<span class="closed">2</span>
+		 	<span class="closed">{{getClosedCount()}} </span>
 		 	<span> / </span>
 		 	<span>{{bugs.length}}</span>
 		 </section>
@@ -24,12 +24,14 @@ import { IBug } from './models/IBug';
 		 <section class="list">
 		 	<ol>
 		 		<li *ngFor="let bug of bugs">
-		 			<span class="bugname">{{bug.name}}</span>
-		 			<i>[{{bug.isClosed}}]</i>
+		 			<span [ngClass]="{closed : bug.isClosed}" (click)="onBugClick(bug)" class="bugname">
+		 				{{bug.name | trimtext}}
+		 			</span>
+		 			
 		 			<div class="datetime">[Created At]</div>
 		 		</li>
 		 	</ol>
-		 	<input type="button" value="Remove Closed">
+		 	<input type="button" value="Remove Closed" (click)="onRemoveClosedClick()">
 		 </section>
 	`
 })
@@ -42,6 +44,25 @@ export class BugTrackerComponent{
 			isClosed : false
 		};
 		this.bugs.push(newBug);
+	}
+
+	onBugClick(bug){
+		bug.isClosed = !bug.isClosed;
+	}
+
+	getClosedCount(){
+		var result = 0;
+		for(var i=0; i < this.bugs.length; i++)
+			if (this.bugs[i].isClosed)
+				++result;
+		return result;
+	}
+
+	onRemoveClosedClick(){
+		for(var i=this.bugs.length-1; i >= 0; i--){
+			if (this.bugs[i].isClosed)
+				this.bugs.splice(i,1);
+		}
 	}
 }
 
