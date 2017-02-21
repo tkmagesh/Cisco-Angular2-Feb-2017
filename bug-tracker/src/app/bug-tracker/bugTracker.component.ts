@@ -6,26 +6,29 @@ import { IBug } from './models/IBug';
 	styleUrls : ['bugTracker.style.css'],
 	template : `
 		<section class="stats">
-		 	<span class="closed">{{getClosedCount()}} </span>
+		 	<span class="closed">{{ bugs | closedcount }} </span>
 		 	<span> / </span>
 		 	<span>{{bugs.length}}</span>
 		 </section>
 		 <section class="sort">
 		 	<label for="">Order By :</label>
-		 	<input type="text" name="" id="">
+		 	<select [(ngModel)]="sortBug">
+				<option value="name">Name</option>
+				<option value="isClosed">Status</option>
+		 	</select>
 		 	<label for="">Descending ? :</label>
-		 	<input type="checkbox" name="" id="">
+		 	<input type="checkbox" [(ngModel)]="sortByDescending">
 		 </section>
 		 <section class="edit">
 		 	<label for="">New Bug :</label>
-		 	<input type="text" #txtBugName>
-		 	<input type="button" value="Save" (click)="onSaveClick(txtBugName.value)">
+		 	<input type="text" [(ngModel)]="newBugName">
+		 	<input type="button" value="Save" (click)="onSaveClick()">
 		 </section>
 		 <section class="list">
 		 	<ol>
-		 		<li *ngFor="let bug of bugs">
+		 		<li *ngFor="let bug of bugs | sort:sortBug:sortByDescending">
 		 			<span [ngClass]="{closed : bug.isClosed}" (click)="onBugClick(bug)" class="bugname">
-		 				{{bug.name | trimtext}}
+		 				{{ bug.name | trimtext:40 }}
 		 			</span>
 		 			
 		 			<div class="datetime">[Created At]</div>
@@ -37,32 +40,33 @@ import { IBug } from './models/IBug';
 })
 export class BugTrackerComponent{
 	bugs : Array<IBug> = [];
+	newBugName : string = '';
 
-	onSaveClick(bugName : string){
+
+	onSaveClick(){
 		var newBug : IBug = {
-			name : bugName,
+			name : this.newBugName,
 			isClosed : false
 		};
-		this.bugs.push(newBug);
+		this.bugs = this.bugs.concat([newBug]);
 	}
 
 	onBugClick(bug){
-		bug.isClosed = !bug.isClosed;
+		this.bugs = this.bugs.map(b => {
+			if (b === bug){
+				return {
+					name : b.name,
+					isClosed : !b.isClosed
+				}
+			} else {
+				return b;
+			}
+		});
 	}
 
-	getClosedCount(){
-		var result = 0;
-		for(var i=0; i < this.bugs.length; i++)
-			if (this.bugs[i].isClosed)
-				++result;
-		return result;
-	}
-
+	
 	onRemoveClosedClick(){
-		for(var i=this.bugs.length-1; i >= 0; i--){
-			if (this.bugs[i].isClosed)
-				this.bugs.splice(i,1);
-		}
+		this.bugs = this.bugs.filter(bug => !bug.isClosed);
 	}
 }
 
