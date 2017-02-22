@@ -1,0 +1,10 @@
+
+	.stats {
+		font-size: 22pt;
+	}
+	
+	.closed{
+		color : blue;
+		text-decoration: line-through;
+		font-weight: bold;
+	}

@@ -7,9 +7,11 @@ import { UtilsModule } from './utils/utils.module';
 
 import { AppComponent } from './app.component';
 import { BugTrackerComponent } from './bug-tracker/bugTracker.component';
-
+import { BugStatsComponent } from './bug-tracker/bug-stats/bugStats.component';
 
 import { ClosedCountPipe } from './bug-tracker/pipes/closedCount.pipe';
+
+import { BugOperations } from './bug-tracker/services/BugOperations.service';
 
 
 @NgModule({
@@ -17,6 +19,7 @@ import { ClosedCountPipe } from './bug-tracker/pipes/closedCount.pipe';
     AppComponent,
     BugTrackerComponent,
     ClosedCountPipe,
+    BugStatsComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,7 @@ import { ClosedCountPipe } from './bug-tracker/pipes/closedCount.pipe';
     HttpModule,
     UtilsModule
   ],
-  providers: [],
+  providers: [BugOperations],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

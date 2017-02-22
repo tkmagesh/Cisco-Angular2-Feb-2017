@@ -1,17 +1,16 @@
-section{
+	/deep/ section{
 		margin-bottom: 10px;
 	}
-	.closed{
+	/deep/ .closed{
 		color : red;
 		font-weight: bold;
 		text-decoration: line-through;
 		font-style: italic;
 	}
-	.stats, .bugname{
-		font-size: 22pt;
-	}
+	
 	.bugname{
 		cursor: pointer;
+		font-size: 22pt;
 	}
 	ol{
 		list-style: none;

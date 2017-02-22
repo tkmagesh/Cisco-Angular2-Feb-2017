@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { IBug } from './models/IBug';
+import { BugOperations } from './services/BugOperations.service';
+
 
 @Component({
 	selector : 'bug-tracker',
 	styleUrls : ['bugTracker.style.css'],
 	template : `
-		<section class="stats">
-		 	<span class="closed">{{ bugs | closedcount }} </span>
-		 	<span> / </span>
-		 	<span>{{bugs.length}}</span>
-		 </section>
+		 <bug-stats [data]="bugs"></bug-stats>
 		 <section class="sort">
 		 	<label for="">Order By :</label>
 		 	<select [(ngModel)]="sortBug">
@@ -42,26 +40,21 @@ export class BugTrackerComponent{
 	bugs : Array<IBug> = [];
 	newBugName : string = '';
 
+	//bugOperations : BugOperations = new BugOperations();
+
+	constructor(public bugOperations : BugOperations){
+
+	}
 
 	onSaveClick(){
-		var newBug : IBug = {
-			name : this.newBugName,
-			isClosed : false
-		};
+		var newBug : IBug = this.bugOperations.createNew(this.newBugName);
 		this.bugs = this.bugs.concat([newBug]);
 	}
 
 	onBugClick(bug){
-		this.bugs = this.bugs.map(b => {
-			if (b === bug){
-				return {
-					name : b.name,
-					isClosed : !b.isClosed
-				}
-			} else {
-				return b;
-			}
-		});
+		this.bugs = this.bugs.map(b => 
+			(b === bug) ? this.bugOperations.toggle(b) : b
+		);
 	}
 
 	
