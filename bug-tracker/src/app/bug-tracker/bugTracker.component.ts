@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IBug } from './models/IBug';
 import { BugStorage } from './services/BugStorage.service';
+import { Http, Response} from '@angular/http';
+import 'rxjs/Rx';
 
-
+declare var fetch;
 
 @Component({
 	selector : 'bug-tracker',
@@ -22,7 +24,7 @@ import { BugStorage } from './services/BugStorage.service';
 		 <section class="list">
 		 	<ol>
 		 		<bug-item  
-		 			*ngFor="let bug of bugs | sort:sortBug:sortByDescending" 
+		 			*ngFor="let bug of bugsAsync | async" 
 		 			[data]="bug" 
 		 			(itemClick)="onBugClick($event)"
 		 		></bug-item>
@@ -31,16 +33,35 @@ import { BugStorage } from './services/BugStorage.service';
 		 </section>
 	`
 })
-export class BugTrackerComponent{
+export class BugTrackerComponent implements OnInit{
 	bugs : Array<IBug> = [];
 	newBugName : string = '';
 
-	
+	bugsAsync : any;
 
-	constructor(public bugStorage : BugStorage){
-		this.bugs = this.bugStorage.getAll();
+	ngOnInit(){
+		/*this.bugsAsync = fetch('http://localhost:3000/bugs')
+		  						.then(response => response.json())
+		  						.then(bugs => {
+		  							this.bugs = bugs;
+		  							return bugs;
+		  						});*/
+
+		this.bugsAsync = 
+			this.http.get('http://localhost:3000/bugs')
+				.map(response => response.json());
+
+
+			
+	
+		 
+
 	}
 
+	constructor(public bugStorage : BugStorage, private http : Http){
+		//this.bugs = this.bugStorage.getAll();
+		
+	}
 	onNewBugEvent(bugName : string){
 		var newBug = this.bugStorage.addNew(bugName);
 		this.bugs = this.bugs.concat([newBug]);
