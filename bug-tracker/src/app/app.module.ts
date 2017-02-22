@@ -3,25 +3,26 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { UtilsModule } from './utils/utils.module';
+
 import { AppComponent } from './app.component';
 import { BugTrackerComponent } from './bug-tracker/bugTracker.component';
 
-import { TrimTextPipe } from './bug-tracker/pipes/trimText.pipe';
+
 import { ClosedCountPipe } from './bug-tracker/pipes/closedCount.pipe';
-import { SortPipe } from './bug-tracker/pipes/sort.pipe';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     BugTrackerComponent,
-    TrimTextPipe,
     ClosedCountPipe,
-    SortPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    UtilsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
