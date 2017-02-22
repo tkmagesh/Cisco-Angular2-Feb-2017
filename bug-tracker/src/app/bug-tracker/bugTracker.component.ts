@@ -18,11 +18,7 @@ import { BugStorage } from './services/BugStorage.service';
 		 	<label for="">Descending ? :</label>
 		 	<input type="checkbox" [(ngModel)]="sortByDescending">
 		 </section>
-		 <section class="edit">
-		 	<label for="">New Bug :</label>
-		 	<input type="text" [(ngModel)]="newBugName">
-		 	<input type="button" value="Save" (click)="onSaveClick()">
-		 </section>
+		 <bug-edit (onNewBug)="onNewBugEvent($event)"></bug-edit>
 		 <section class="list">
 		 	<ol>
 		 		<li *ngFor="let bug of bugs | sort:sortBug:sortByDescending">
@@ -47,8 +43,8 @@ export class BugTrackerComponent{
 		this.bugs = this.bugStorage.getAll();
 	}
 
-	onSaveClick(){
-		var newBug : IBug = this.bugStorage.addNew(this.newBugName);
+	onNewBugEvent(bugName : string){
+		var newBug = this.bugStorage.addNew(bugName);
 		this.bugs = this.bugs.concat([newBug]);
 	}
 
