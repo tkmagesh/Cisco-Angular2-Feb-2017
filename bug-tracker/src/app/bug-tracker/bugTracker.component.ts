@@ -21,13 +21,11 @@ import { BugStorage } from './services/BugStorage.service';
 		 <bug-edit (onNewBug)="onNewBugEvent($event)"></bug-edit>
 		 <section class="list">
 		 	<ol>
-		 		<li *ngFor="let bug of bugs | sort:sortBug:sortByDescending">
-		 			<span [ngClass]="{closed : bug.isClosed}" (click)="onBugClick(bug)" class="bugname">
-		 				{{ bug.name | trimtext:40 }}
-		 			</span>
-		 			
-		 			<div class="datetime">[Created At]</div>
-		 		</li>
+		 		<bug-item  
+		 			*ngFor="let bug of bugs | sort:sortBug:sortByDescending" 
+		 			[data]="bug" 
+		 			(itemClick)="onBugClick($event)"
+		 		></bug-item>
 		 	</ol>
 		 	<input type="button" value="Remove Closed" (click)="onRemoveClosedClick()">
 		 </section>

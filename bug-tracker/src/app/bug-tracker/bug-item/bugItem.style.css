@@ -1,0 +1,16 @@
+.bugname{
+		cursor: pointer;
+		font-size: 22pt;
+	}
+
+li{
+	margin-bottom: 10px;
+	border-radius: 5px;
+	padding: 5px;
+	background-color: #e7e7e7;
+	border : 1px solid gray;
+}
+.datetime{
+	font-style: italic;
+	font-size: small;
+}
