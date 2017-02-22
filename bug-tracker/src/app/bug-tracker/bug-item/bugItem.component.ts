@@ -9,7 +9,7 @@ import { IBug } from '../models/IBug';
  				{{ data.name | trimtext:40 }}
  			</span>
  			
- 			<div class="datetime">{{data.createdAt}}</div>
+ 			<div class="datetime">{{data.createdAt | elapsed}}</div>
  		</li>
 	`,
 	styleUrls : ['bugItem.style.css']
